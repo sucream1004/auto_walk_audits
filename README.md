@@ -23,19 +23,29 @@ Testing sample 은 다음과 같이 생겼습니다.
 ## inference
 
 ```
-# Visualize
-from PIL import Image
-from glob import glob
-import os 
+import os
 
+from PIL import Image
+import cv2
+
+from detectron2 import model_zoo
+from detectron2.engine import DefaultPredictor
+from detectron2.config import get_cfg
 from detectron2.utils.visualizer import ColorMode, Visualizer
 
+model_iter = "model_iter.pth"
+
+cfg = get_cfg()
+cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")) # COCO mask_rcnn_R_50_FPN pretrained weight
+cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, f"model_{model_iter}.pth")  # path to the trained model
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7   # set threshold
+predictor = DefaultPredictor(cfg)
 
 im = cv2.imread("./gsv_search/screen.png")
-outputs = predictor(im)  # format is documented at https://detectron2.readthedocs.io/tutorials/models.html#model-output-format
+outputs = predictor(im)
 v = Visualizer(im[:, :, ::-1],
                scale=0.5,
-               instance_mode=ColorMode.IMAGE_BW   # remove the colors of unsegmented pixels. This option is only available for segmentation models
+               instance_mode=ColorMode.IMAGE_BW
 )
 out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
 display(Image.fromarray(out.get_image()[:, :, ::-1]))
