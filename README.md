@@ -5,7 +5,9 @@
 dataset 은 요청하시면 줄게요 (Google forms link)  
 
 Training sample 은 다음처럼 생겼습니다.
-[example1.png]
+[example1.png] # 벤치
+
+[_bollard_] # 볼라드
 
 Testing sample 은 다음과 같이 생겼습니다.
 
