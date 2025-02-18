@@ -17,37 +17,43 @@ Testing sample 은 다음과 같이 생겼습니다.
 * Detectron2 by Meta
 
 이거 참고하세요. https://detectron2.readthedocs.io/en/latest/tutorials/install.html. 설치는 Docker 를 추천합니다.
+Windows 에서 설치하고 싶으시면: https://helloshreyas.com/how-to-install-detectron2-on-windows-machine 참고하세요.
 
 ## Benchmark
 
 
 
 ## inference
-
+* model 을 받아서 한번 해보세요.
+* model 은 [구글 드라이브] 에서 받으세요.
+* 코드는 다음과 같이하면 됩니다. inference.ipynb 를 확인하세요.
 ```
-import os
-
 from PIL import Image
 import cv2
+import numpy as np
 
+from detectron2.utils.visualizer import ColorMode, Visualizer
 from detectron2 import model_zoo
 from detectron2.engine import DefaultPredictor
 from detectron2.config import get_cfg
-from detectron2.utils.visualizer import ColorMode, Visualizer
+from detectron2.utils.visualizer import Visualizer
+from detectron2.data import MetadataCatalog, DatasetCatalog
+import torch
 
-model_iter = "model_iter.pth"
-
-cfg = get_cfg()
-cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml")) # COCO mask_rcnn_R_50_FPN pretrained weight
-cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, f"model_{model_iter}.pth")  # path to the trained model
-cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7   # set threshold
+cfg.INPUT.MASK_FORMAT='bitmask'
+cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+cfg.MODEL.ROI_HEADS.NUM_CLASSES = 1
+cfg.MODEL.WEIGHTS = "best_model_bench.pth"
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.7
 predictor = DefaultPredictor(cfg)
+# change the img path if you want to test your own image.
 
-im = cv2.imread("./gsv_search/screen.png")
+im = cv2.imread("61_jpg.rf.4e147b7acbea1a7ded08a22b42d1f0ec.jpg")
+ori_size = im.shape[:2]
 outputs = predictor(im)
 v = Visualizer(im[:, :, ::-1],
-               scale=0.5,
-               instance_mode=ColorMode.IMAGE_BW
+                scale=1,
+                instance_mode=ColorMode.IMAGE_BW
 )
 out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
 display(Image.fromarray(out.get_image()[:, :, ::-1]))
