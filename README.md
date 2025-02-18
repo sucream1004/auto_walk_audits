@@ -58,3 +58,5 @@ outputs = predictor(im)
 v = Visualizer(im[:, :, ::-1], scale=1, instance_mode=ColorMode.IMAGE_BW)
 out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
 display(Image.fromarray(out.get_image()[:, :, ::-1]))
+```
+![Example](img/infer.png)
