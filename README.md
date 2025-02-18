@@ -5,28 +5,26 @@
 dataset 은 요청하시면 줄게요 (Google forms link)  
 
 Training sample 은 다음처럼 생겼습니다.
-[example1.png] # 벤치
-
-[_bollard_] # 볼라드
+[img/example1.png]
 
 Testing sample 은 다음과 같이 생겼습니다.
-
-## Transfer learning training with custom data
+[41_jpg.rf.d4decd52af681d8f86b1b8139e4e8950.jpg] # testing 데이터
 
 ### Requirements
 * Detectron2 by Meta
-
-이거 참고하세요. https://detectron2.readthedocs.io/en/latest/tutorials/install.html. 설치는 Docker 를 추천합니다.
-Windows 에서 설치하고 싶으시면: https://helloshreyas.com/how-to-install-detectron2-on-windows-machine 참고하세요.
+* 이거 참고하세요. https://detectron2.readthedocs.io/en/latest/tutorials/install.html. 설치는 Docker 를 추천합니다.
+* Windows 에서 설치하고 싶으시면: https://helloshreyas.com/how-to-install-detectron2-on-windows-machine 참고하세요.
 
 ## Benchmark
-
-
+* existing data (benchmark data) 로는 ade20k 를 사용했습니다 (https://ade20k.csail.mit.edu/).
 
 ## inference
 * model 을 받아서 한번 해보세요.
 * model 은 [구글 드라이브] 에서 받으세요.
 * 코드는 다음과 같이하면 됩니다. inference.ipynb 를 확인하세요.
+
+[inference 예시]
+  
 ```
 from PIL import Image
 import cv2
@@ -58,3 +56,9 @@ v = Visualizer(im[:, :, ::-1],
 out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
 display(Image.fromarray(out.get_image()[:, :, ::-1]))
 ```
+
+## Testing
+* Testing 은 마찬가지로 testing.ipynb 를 사용하시면 됩니다.
+* 직접 데이터를 받아서 training 을 해서 사용하셔도 되고, best model 을 받으셔서 해보셔도 됩니다.
+
+[img/infer.png]
