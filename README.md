@@ -24,7 +24,7 @@ We use **ADE20K** as our benchmark dataset. More details can be found here: [ADE
 ## Inference
 To run inference using our model, follow these steps:
 
-1. Download the pre-trained model from [Google Drive link].
+1. Download the pre-trained model from [Google Drive link](https://drive.google.com/drive/folders/1JNZF2dOIcHk8bFP6hn2DFpXZ0Sld2dCK?usp=drive_link).
 2. Use the provided `inference.ipynb` notebook.
 3. Alternatively, run the following code snippet:
 
